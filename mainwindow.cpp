@@ -23,11 +23,13 @@ MainWindow::MainWindow(QWidget *parent)
     //根据图片大小设置窗口大小
     this->setWindowTitle("减肥大作战");
       this->resize(1000,580);
-     m_waves=0;
+     m_waves=1;
     m_playerHp=5;
     m_playrGold=1000;
     m_gameEnded=false;
     m_gameWin =false;
+    m_round=1;
+    m_flag=true;
     QHBoxLayout *blayout =new QHBoxLayout();
     QVBoxLayout *vlayout = new QVBoxLayout();
     QLabel *labelround =new QLabel("关卡:     1");
@@ -58,11 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
       ui->widget->setFixedSize(800,580);
         this->centralWidget()->setLayout(blayout);
    // initWaves();
-      initConfig();//初始化怪物信息
 
-    addWayPoints();
-    //初始化炮塔位置
-     initPosition();
     combox =new QComboBox(this);
     combox->addItem(QIcon("../../../../lwTowerDemo/image/tower.png"),"炮塔1");
     combox->addItem(QIcon("../../../../lwTowerDemo/image/tower2.png"),"炮塔2");
@@ -86,7 +84,7 @@ void MainWindow::initPosition()
 {
    //第一排
     QPoint p1(142,105);
-    QPoint p2(309,105);
+     QPoint p2(309,105);
     QPoint p5(486,105);
     QPoint p7(658,105);
     //第二
@@ -106,28 +104,88 @@ void MainWindow::initPosition()
        m_towerPositionsList.push_back(p7);
         m_towerPositionsList.push_back(p9);
          m_towerPositionsList.push_back(p11);
-          m_towerPositionsList.push_back(p12);
+           m_towerPositionsList.push_back(p12);
            m_towerPositionsList.push_back(p13);
             m_towerPositionsList.push_back(p14);
-             m_towerPositionsList.push_back(p15);
+              m_towerPositionsList.push_back(p15);
               m_towerPositionsList.push_back(p16);
                m_towerPositionsList.push_back(p17);
 
+}
+
+void MainWindow::initPosition2()
+{
+    QPoint p1(5,439);
+     QPoint p2(10,326);
+    QPoint p5(130,405);
+    QPoint p7(160,253);
+    //第二
+    QPoint p9(288,245);
+    QPoint p11(297,109);
+    QPoint p12(427,106);
+     //第三
+    QPoint p13(666,203);
+    QPoint p14(660,356);
+    QPoint p15(316,429);
+      //第四排
+    QPoint p16(420,531);
+ //   QPoint p17(545,530);
+    m_towerPositionsList.push_back(p1);
+     m_towerPositionsList.push_back(p2);
+      m_towerPositionsList.push_back(p5);
+       m_towerPositionsList.push_back(p7);
+        m_towerPositionsList.push_back(p9);
+         m_towerPositionsList.push_back(p11);
+           m_towerPositionsList.push_back(p12);
+           m_towerPositionsList.push_back(p13);
+            m_towerPositionsList.push_back(p14);
+              m_towerPositionsList.push_back(p15);
+              m_towerPositionsList.push_back(p16);
+           //    m_towerPositionsList.push_back(p17);
 }
 
 void MainWindow::paintEvent(QPaintEvent *)
 {
     if (m_gameEnded || m_gameWin)
     {
-        QString text = m_gameEnded ? "YOU LOST!!!" : "YOU WIN!!!";
+        if(m_gameEnded)
+        {
+            m_flag =false;
+        QString text =" game over";
         QPainter painter(this);
         painter.setPen(QPen(Qt::red));
         painter.drawText(rect(), Qt::AlignCenter, text);
         return;
+        }
+        else if(m_gameWin)
+        {
+              m_flag =false;
+             // m_wayPointsList.clear();
+                m_towerPositionsList.clear();
+                m_towersList.clear();
+                m_enemyList.clear();
+                m_bulletList.clear();
+                startPushBUtton->setEnabled(true);
+
+        }
     }
 
-    QPixmap cachePix("../../../../lwTowerDemo/image/bg1.png");
-    QPainter cachePainter(&cachePix);
+
+
+
+   QString str("");
+
+    if(m_round==1&&m_flag)
+    {
+        str="../../../../lwTowerDemo/image/bg1.png";
+    }
+    else if(m_round==2&&m_flag)
+    {
+         str="../../../../lwTowerDemo/image/bg2.png";
+    }
+      QPixmap cachePix(str);
+     QPainter cachePainter(&cachePix);
+
 
     foreach (const TowerPosition &towerPos, m_towerPositionsList)
         towerPos.draw(&cachePainter);
@@ -148,7 +206,7 @@ void MainWindow::paintEvent(QPaintEvent *)
 //	drawHP(&cachePainter);
 //	drawPlayerGold(&cachePainter);
     //金币更新
-    m_waves=+1;
+   // m_waves=m_waves+1;
     goldcount->setText(QString::number(m_playrGold));
     gameHp->setText(QString::number(m_playerHp));
     QPainter painter(this);
@@ -187,13 +245,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         {
 
     //		m_audioPlayer->playSound(TowerPlaceSound);
+            m_position=&it.i->t();
             combox->move(event->pos());
             combox->showPopup();
-          //  combox->show();
-
-
             m_pos=it->centerPos();
-             it->setHasTower();
 //            Tower *tower = new Tower(it->centerPos(), this);
 //            m_towersList.push_back(tower);
 //            update();
@@ -213,23 +268,6 @@ bool MainWindow::canBuyTower() const
 }
 
 
-//void MainWindow::drawWave(QPainter *painter)
-//{
-//	painter->setPen(QPen(Qt::red));
-//	painter->drawText(QRect(400, 5, 100, 25), QString("WAVE : %1").arg(m_waves + 1));
-//}
-
-//void MainWindow::drawHP(QPainter *painter)
-//{
-//	painter->setPen(QPen(Qt::red));
-//	painter->drawText(QRect(30, 5, 100, 25), QString("HP : %1").arg(m_playerHp));
-//}
-
-//void MainWindow::drawPlayerGold(QPainter *painter)
-//{
-//	painter->setPen(QPen(Qt::red));
-//	painter->drawText(QRect(200, 5, 200, 25), QString("GOLD : %1").arg(m_playrGold));
-//}
 
 void MainWindow::doGameOver()
 {
@@ -243,27 +281,28 @@ void MainWindow::doGameOver()
 
 void MainWindow::initConfig()
 {
+    paraconfig.clear();
       QPair<QString,int> temp;
     QVector<QPair<QString,int>> round1;
      QVector<QPair<QString,int>> round2;
        QVector<QPair<QString,int>> round3;
     for (int i=0;i<5;i++) {
-        temp.first="怪物1";
+        temp.first="monster1";
         temp.second=(qrand()%30)*100;
         round1.append(temp);
-        temp.first="怪物2";
+        temp.first="monster2";
         temp.second=(10+qrand()%40)*100;
         round2.append(temp);
-        temp.first="怪物3";
-        temp.second=(3+qrand()%3)*1000;
-        round3.append(temp);
+        temp.first="monster3";
+         temp.second=(3+qrand()%3)*1000;
+         round3.append(temp);
     }
     for (int i=0;i<3;i++) {
-        temp.first="怪物2";
+        temp.first="monster2";
         temp.second=(3+qrand()%3)*1000;
         round1.append(temp);
         round3.append(temp);
-        temp.first="怪物3";
+        temp.first="monster3";
         temp.second=(2+qrand()%3)*1000;
         round2.append(temp);
     }
@@ -305,6 +344,47 @@ void MainWindow::addWayPoints()
     wayPoint6->setNextWayPoint(wayPoint5);
 
 }
+void MainWindow::addWayPoints2()
+{
+  //  m_wayPointsList.clear();
+    attackPath *wayPoint1 = new attackPath(QPoint(710,490));
+    m_wayPointsList.push_back(wayPoint1);
+
+    attackPath *wayPoint2 = new attackPath(QPoint(400,490));
+    m_wayPointsList.push_back(wayPoint2);
+    wayPoint2->setNextWayPoint(wayPoint1);
+
+    attackPath *wayPoint3 = new attackPath(QPoint(392,420));
+    m_wayPointsList.push_back(wayPoint3);
+    wayPoint3->setNextWayPoint(wayPoint2);
+
+    attackPath *wayPoint4 = new attackPath(QPoint(610,406));
+    m_wayPointsList.push_back(wayPoint4);
+    wayPoint4->setNextWayPoint(wayPoint3);
+
+    attackPath *wayPoint5 = new attackPath(QPoint(620,200));
+    m_wayPointsList.push_back(wayPoint5);
+    wayPoint5->setNextWayPoint(wayPoint4);
+
+    attackPath *wayPoint6 = new attackPath(QPoint(250,200));
+    m_wayPointsList.push_back(wayPoint6);
+    wayPoint6->setNextWayPoint(wayPoint5);
+
+
+    attackPath *wayPoint7 = new attackPath(QPoint(230,330));
+    m_wayPointsList.push_back(wayPoint7);
+    wayPoint7->setNextWayPoint(wayPoint6);
+
+    attackPath *wayPoint8 = new attackPath(QPoint(89,340));
+    m_wayPointsList.push_back(wayPoint8);
+    wayPoint8->setNextWayPoint(wayPoint7);
+
+    attackPath *wayPoint9 = new attackPath(QPoint(87,513));
+    m_wayPointsList.push_back(wayPoint9);
+    wayPoint9->setNextWayPoint(wayPoint8);
+
+}
+
 
 void MainWindow::getHpDamage(int damage/* = 1*/)
 {
@@ -323,10 +403,11 @@ void MainWindow::removedEnemy(Monster *enemy)
 
     if (m_enemyList.empty())
     {
-        ++m_waves;
+        m_waves=m_waves+1;
         if (!loadWave())
         {
             m_gameWin = true;
+            m_round=2;
             // 游戏胜利转到游戏胜利场景
             // 这里暂时以打印处理
         }
@@ -356,41 +437,29 @@ void MainWindow::updateMap()
         tower->checkEnemyInRange();
     update();
 }
-//初始化波数
-//void MainWindow::initWaves()
-//{
-//    QFile file("../lwTowerDemo/config/Waves.plist");
-//    if (!file.open(QFile::ReadOnly | QFile::Text))
-//    {
-//        QMessageBox::warning(this, "TowerDefense", "Cannot Open TowersPosition.plist");
-//        return;
-//    }
 
-//    PListReader reader;
-//    reader.read(&file);
-//    m_wavesInfo = reader.data();
-//    file.close();
-//}
 
 bool MainWindow::loadWave()
 {
-   if(m_waves>paraconfig.size())
+   if(m_waves>=paraconfig.size())
    {
        return false;
    }
+   m_waves=m_waves+1;
+   qDebug()<<"waves:"<<m_waves;
      attackPath *startWayPoint = m_wayPointsList.back();
      for (int i=0;i<paraconfig.size();i++) {
          for (int j=0;j<paraconfig[i].size();j++) {
                QPixmap temp;
-             if(paraconfig[i][j].first=="怪物1")
+             if(paraconfig[i][j].first=="monster1")
              {
                   temp=QPixmap("../../../../lwTowerDemo/image/monster1.png");
              }
-              else if(paraconfig[i][j].first=="怪物2")
+              else if(paraconfig[i][j].first=="monster2")
               {
                    temp=QPixmap("../../../../lwTowerDemo/image/monster2.png");
               }
-              else if(paraconfig[i][j].first=="怪物3")
+              else if(paraconfig[i][j].first=="monster3")
               {
                     temp=QPixmap("../../../../lwTowerDemo/image/monster3.png");
               }
@@ -401,6 +470,17 @@ bool MainWindow::loadWave()
          }
      }
      return true;
+
+}
+
+bool MainWindow::loadWave2()
+{
+     m_flag=true;
+    m_waves=1;
+   m_playerHp=5;
+   m_playrGold=2000;
+   m_gameEnded=false;
+   m_gameWin =false;
 }
 
 QList<Monster *> MainWindow::enemyList() const
@@ -411,7 +491,23 @@ QList<Monster *> MainWindow::enemyList() const
 void MainWindow::gameStart()
 {
     startPushBUtton->setDisabled(true);
+    if(m_round==1)
+    {
+      initPosition();
+     addWayPoints();
+      initConfig();
     loadWave();
+    }
+    else if(m_round==2)
+    {
+        m_flag=true;
+        loadWave2();
+        initPosition2();
+        addWayPoints2();
+          initConfig();
+
+        loadWave();
+    }
 }
 
 void MainWindow::getInform(int temp)
@@ -447,4 +543,5 @@ void MainWindow::getInform(int temp)
     }
     combox->hide();
     combox->setCurrentIndex(-1);
+    m_position->setHasTower();
 }

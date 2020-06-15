@@ -49,14 +49,19 @@ private:
     const int initGold =300;
     QPushButton *startPushBUtton;
     QComboBox *combox;
-
+    bool m_flag;
+     TowerPosition* m_position;
   //  SelectionBox* SelBox;
    QLabel *round;
+   int m_round;
    QLabel *goldcount;
-   QLabel *gameHp;
+   QLabel*gameHp;
    void initPosition();
+    void initPosition2();
    void addWayPoints();
+    void addWayPoints2();
    bool loadWave();
+   bool loadWave2();
    bool canBuyTower() const;
     void DrawSelectionBox(QPainter&);
 //	void drawWave(QPainter *painter);
