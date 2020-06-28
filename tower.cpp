@@ -11,7 +11,7 @@
 
 const QSize Tower::ms_fixedSize(42, 42);
 
-Tower::Tower(QPoint pos, MainWindow *game, const QPixmap &sprite)
+Tower::Tower(QPoint pos, MainWindow *game, int type,int degree)
     : m_attacking(false)
     , m_attackRange(140)
     , m_damage(30)
@@ -20,8 +20,38 @@ Tower::Tower(QPoint pos, MainWindow *game, const QPixmap &sprite)
     , m_chooseEnemy(NULL)
     , m_game(game)
     , m_pos(pos)
-    , m_sprite(sprite)
+    , m_type(type)
+    , m_degree(degree)
 {
+    if(m_type==1)
+    {
+        if(m_degree==1)
+        {
+            m_sprite=QPixmap("../../../../lwTowerDemo/image/tower.png");
+        }
+        else
+        {
+            m_sprite=QPixmap("../../../../lwTowerDemo/image/upgradedtower.png");
+            m_damage=50;
+            m_attackRange=160;
+        }
+
+    }
+    else if(m_type==2)
+    {
+        if(m_degree==1)
+        {
+            m_sprite=QPixmap("../../../../lwTowerDemo/image/tower2.png");
+            m_damage=40;
+            m_attackRange=200;
+        }
+        else
+        {
+              m_sprite=QPixmap("../../../../lwTowerDemo/image/upgradedtower2.png");
+              m_damage=45;
+              m_attackRange=260;
+        }
+    }
     m_fireRateTimer = new QTimer(this);
     connect(m_fireRateTimer, SIGNAL(timeout()), this, SLOT(shootWeapon()));
 }
@@ -34,7 +64,7 @@ Tower::~Tower()
 
 void Tower::checkEnemyInRange()
 {
-    if (m_chooseEnemy)
+    if (m_chooseEnemy)//不是空指针
     {
         // 这种情况下,需要旋转炮台对准敌人
         // 向量标准化
@@ -64,16 +94,11 @@ void Tower::checkEnemyInRange()
 void Tower::draw(QPainter *painter) const
 {
     painter->save();
-    painter->setPen(Qt::white);
-    // 绘制攻击范围
-//	painter->drawEllipse(m_pos, m_attackRange, m_attackRange);
-
     // 绘制偏转坐标,由中心+偏移=左上
     static const QPoint offsetPoint(-ms_fixedSize.width() / 2, -ms_fixedSize.height() / 2);
     // 绘制炮塔并选择炮塔
     painter->translate(m_pos);
     painter->rotate(m_rotationSprite);
-    m_sprite.scaled(30,30);
     painter->drawPixmap(offsetPoint, m_sprite);
     painter->restore();
 }

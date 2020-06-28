@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
 #include <QList>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -12,46 +11,49 @@
 #include <QVector>
 #include <QPair>
 #include <QComboBox>
+#include <QMediaPlayer>
 #include "towerposition.h"
 #include "tower.h"
 #include "weapon.h"
 #include "attackpath.h"
-//#include "selectionbox.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
-
+class AudioPlayer;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(int secen,QWidget *parent = nullptr);
     ~MainWindow();
+    AudioPlayer* audioPlayer() const;
 public:
     void getHpDamage(int damage = 1);
     void removedEnemy(Monster *enemy);
     void removedBullet(Weapon *bullet);
     void addBullet(Weapon *bullet);
     void awardGold(int gold);
-
-    //AudioPlayer* audioPlayer() const;
     QList<Monster *> enemyList() const;
 
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
+signals:
+    void sendsucessorf(int);
 public slots:
     void updateMap();
     void gameStart();
     void getInform(int);
+    void changeState(int);
 private:
     QMap<int,QVector<QPair<QString,int>>> paraconfig;
     const int initGold =300;
-    QPushButton *startPushBUtton;
+    QPushButton *startPushButton;
     QComboBox *combox;
+      QComboBox *combox_c;
     bool m_flag;
      TowerPosition* m_position;
-  //  SelectionBox* SelBox;
    QLabel *round;
    int m_round;
    QLabel *goldcount;
@@ -61,12 +63,8 @@ private:
    void addWayPoints();
     void addWayPoints2();
    bool loadWave();
-   bool loadWave2();
+    bool loadWave2();
    bool canBuyTower() const;
-    void DrawSelectionBox(QPainter&);
-//	void drawWave(QPainter *painter);
-//	void drawHP(QPainter *painter);
-//	void drawPlayerGold(QPainter *painter);
    void doGameOver();
    void initConfig();
 
@@ -76,12 +74,12 @@ private:
     int						m_playrGold;
     bool					m_gameEnded;
     bool					m_gameWin;
-//	AudioPlayer *			m_audioPlayer;
+    AudioPlayer *			m_audioPlayer;//类的组合
     QList<QVariant>			m_wavesInfo;
     QList<TowerPosition>	m_towerPositionsList;
     QList<Tower *>			m_towersList;
     QList<attackPath *>		m_wayPointsList;
-    QList<Monster *>			m_enemyList;
+    QList<Monster *>		m_enemyList;
     QList<Weapon *>			m_bulletList;
     Ui::MainWindow *ui;
 };

@@ -5,12 +5,13 @@
 #include <QPoint>
 #include <QSize>
 #include <QPixmap>
+
 class attackPath;
 class QPainter;
 class MainWindow;
 class Tower;
 
-class Monster : public QObject
+class Monster : public QObject//继承
 {
     Q_OBJECT
 public:
@@ -35,8 +36,8 @@ private:
     qreal			m_walkingSpeed;
     qreal			m_rotationSprite;
 
-    QPoint			m_pos;
-    attackPath *		m_destinationWayPoint;
+    QPoint			m_pos;//类的组合
+    attackPath *	m_destinationWayPoint;
     MainWindow *	m_game;
     QList<Tower *>	m_attackedTowersList;
 

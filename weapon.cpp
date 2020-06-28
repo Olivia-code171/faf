@@ -25,7 +25,6 @@ void Weapon::draw(QPainter *painter) const
 
 void Weapon::move()
 {
-    // 100毫秒内击中敌人
     static const int duration = 100;
     QPropertyAnimation *animation = new QPropertyAnimation(this, "m_currentPos");
     animation->setDuration(duration);
@@ -38,10 +37,6 @@ void Weapon::move()
 
 void Weapon::hitTarget()
 {
-    // 这样处理的原因是:
-    // 可能多个炮弹击中敌人,而其中一个将其消灭,导致敌人delete
-    // 后续炮弹再攻击到的敌人就是无效内存区域
-    // 因此先判断下敌人是否还有效
     if (m_game->enemyList().indexOf(m_target) != -1)
         m_target->getDamage(m_damage);
     m_game->removedBullet(this);

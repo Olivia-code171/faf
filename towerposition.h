@@ -10,7 +10,7 @@ class QPainter;
 class TowerPosition
 {
 public:
-    TowerPosition(QPoint pos, const QPixmap &sprite = QPixmap("../../../../lwTowerDemo/image/towerpostion.png"));
+    TowerPosition(QPoint pos, const QPixmap &sprite = QPixmap("../../../../lwTowerDemo/image/towerposition.png"));
 
     void setHasTower(bool hasTower = true);
     bool hasTower() const;
@@ -18,7 +18,7 @@ public:
     bool containPoint(const QPoint &pos) const;
 
     void draw(QPainter *painter) const;
-
+    void setNoTower();
 private:
     bool		m_hasTower;
     QPoint		m_pos;

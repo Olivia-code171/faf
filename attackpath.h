@@ -2,9 +2,6 @@
 #define WAYPOINT_H
 
 #include <QPoint>
-#include <QPainter>
-class QPainter;
-
 
 class attackPath
 {
@@ -15,11 +12,10 @@ public:
     attackPath* nextWayPoint() const;
     const QPoint pos() const;
 
-    void draw(QPainter *painter) const;
-
 private:
-    const QPoint		m_pos;
-    attackPath *			m_nextWayPoint;
+    const QPoint		m_pos;//类的组合，attackPath类的成员数据是另一个类(QPoint)的对象，依赖关系
+    attackPath *		m_nextWayPoint;
 };
 
 #endif // WAYPOINT_H
+

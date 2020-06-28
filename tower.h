@@ -6,7 +6,6 @@
 #include <QPixmap>
 #include <QObject>
 
-class QPainter;
 class Monster;
 class MainWindow;
 class QTimer;
@@ -15,7 +14,7 @@ class Tower : QObject
 {
     Q_OBJECT
 public:
-    Tower(QPoint pos, MainWindow *game, const QPixmap &sprite);
+    Tower(QPoint pos, MainWindow *game,int type,int degree);
     ~Tower();
 
     void draw(QPainter *painter) const;
@@ -26,7 +25,9 @@ public:
     void removeBullet();
     void damageEnemy();
     void lostSightOfEnemy();
-
+    const QPoint	m_pos;
+    int m_type;//塔类型
+    int m_degree;//升级状况
 private slots:
     void shootWeapon();
 
@@ -35,14 +36,12 @@ private:
     int				m_attackRange;	// 代表塔可以攻击到敌人的距离
     int				m_damage;		// 代表攻击敌人时造成的伤害
     int				m_fireRate;		// 代表再次攻击敌人的时间间隔
-    qreal			m_rotationSprite;
+    double          m_rotationSprite;
 
-    Monster *			m_chooseEnemy;
+    Monster *	    m_chooseEnemy;
     MainWindow *	m_game;
     QTimer *		m_fireRateTimer;
-
-    const QPoint	m_pos;
-    const QPixmap	m_sprite;
+    QPixmap	        m_sprite;//类的组合，塔长啥样
 
     static const QSize ms_fixedSize;
 };

@@ -3,7 +3,7 @@
 #include "tower.h"
 #include "utility.h"
 #include "mainwindow.h"
-//#include "audioplayer.h"
+#include "audioplayer.h"
 #include <QPainter>
 #include <QColor>
 #include <QDebug>
@@ -27,7 +27,6 @@ Monster::Monster(attackPath *startWayPoint, MainWindow *game, const QPixmap &spr
     , m_game(game)
     , m_sprite(sprite)
 {
-  //  m_sprite=":/image/monster.png";
 }
 
 Monster::~Monster()
@@ -95,7 +94,7 @@ void Monster::draw(QPainter *painter) const
     QRect healthBarBackRect(healthBarPoint, QSize(Health_Bar_Width, 2));
     painter->drawRect(healthBarBackRect);
 
-    painter->setBrush(Qt::green);
+    painter->setBrush(Qt::yellow);
     QRect healthBarRect(healthBarPoint, QSize((double)m_currentHp / m_maxHp * Health_Bar_Width, 2));
     painter->drawRect(healthBarRect);
 
@@ -122,13 +121,11 @@ void Monster::getRemoved()
 
 void Monster::getDamage(int damage)
 {
-//	m_game->audioPlayer()->playSound(LaserShootSound);
     m_currentHp -= damage;
 
     // 阵亡,需要移除
     if (m_currentHp <= 0)
     {
-    //	m_game->audioPlayer()->playSound(EnemyDestorySound);
         m_game->awardGold(200);
         getRemoved();
     }

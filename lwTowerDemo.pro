@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -21,21 +21,23 @@ SOURCES += \
     mainwindow.cpp \
     monster.cpp \
     plistreader.cpp \
- #   selectionbox.cpp \
     tower.cpp \
     towerposition.cpp \
-    weapon.cpp
+    weapon.cpp \
+    audioplayer.cpp\
+    startscene.cpp
 
 HEADERS += \
     attackpath.h \
     mainwindow.h \
     monster.h \
     plistreader.h \
-  #  selectionbox.h \
     tower.h \
     towerposition.h \
     utility.h \
-    weapon.h
+    weapon.h \
+    audioplayer.h\
+    startscene.h
 
 FORMS += \
     mainwindow.ui

@@ -8,7 +8,7 @@
 #include <QPainter>
 #include "monster.h"
 
-class MainWindow;
+class Mainwindow;
 
 class Weapon : QObject
 {
@@ -19,20 +19,20 @@ public:
     Weapon(QPoint startPos, QPoint targetPoint, int damage, Monster *target,
            MainWindow *game, const QPixmap &sprite = QPixmap("../../../../lwTowerDemo/image/weapon1.png"));
 
-    void draw(QPainter *painter) const;
+    void draw(QPainter *painter) const;//常成员函数
     void move();
     void setCurrentPos(QPoint pos);
-    QPoint currentPos() const;
+    QPoint currentPos() const;//常成员函数
 
 private slots:
     void hitTarget();
 
 private:
-    const QPoint	m_startPos;
+    const QPoint	m_startPos;//常对象
     const QPoint	m_targetPos;
     const QPixmap	m_sprite;
     QPoint			m_currentPos;
-    Monster *			m_target;
+    Monster *		m_target;
     MainWindow *	m_game;
     int				m_damage;
 

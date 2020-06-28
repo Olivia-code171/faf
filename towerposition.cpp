@@ -28,7 +28,7 @@ bool TowerPosition::hasTower() const
     return m_hasTower;
 }
 
-void TowerPosition::setHasTower(bool hasTower/* = true*/)
+void TowerPosition::setHasTower(bool hasTower)
 {
     m_hasTower = hasTower;
 }
@@ -37,3 +37,9 @@ void TowerPosition::draw(QPainter *painter) const
 {
     painter->drawPixmap(m_pos.x(), m_pos.y(), m_sprite);
 }
+
+void TowerPosition::setNoTower()
+{
+    m_hasTower=false;
+}
+
